@@ -26,7 +26,7 @@ Then, specify the div you want to fill and the repos per username you want to sh
 
 This results in:
 
-![Example image](example.png)
+![Example image](https://raw.github.com/moonshinedevco/showoff/master/example.png)
 
 ## License
 
