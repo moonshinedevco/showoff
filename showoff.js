@@ -8,12 +8,12 @@ var SHOWOFF = {
       SHOWOFF.inited = true;
    },
    load: function(div, repos) {
-      SHOWOFF.div = "#" + div;
+      SHOWOFF.div = div;
       SHOWOFF.repos = repos;
       if(!SHOWOFF.inited) SHOWOFF.init();
-      $(div).hide();
+      $('#' + div).hide();
       for(username in repos)
-	 $.getScript("https://api.github.com/users/" + username + "/repos?callback=SHOWOFF.showRepos")
+	 $.getScript("https://api.github.com/users/" + username + "/repos?callback=SHOWOFF.showRepos");
    },
    setStyles: function() {
       var style = ".repo { font-family: Helvetica,arial,freesans,clean,sans-serif; border: 1px solid; " +
@@ -29,13 +29,15 @@ var SHOWOFF = {
       $("head").append("<style id=\"showoff-styles\">" + style + "</style>");
    },
    showRepos: function(result) {
-      var repos = result.data;
+      var repos = result.data, html = "";
       $.each(repos, function(index, repo) {
 		if(repo.owner.login in SHOWOFF.repos && $.inArray(repo.name, SHOWOFF.repos[repo.owner.login]) != -1)
-		   $(SHOWOFF.div).html($(SHOWOFF.div).html() + SHOWOFF.buildHTML(repo));
+		   html += SHOWOFF.buildHTML(repo);
 	     });
+      // due to some weird caching by jQuery, this is necessary
+      document.getElementById(SHOWOFF.div).innerHTML += html;
       $("span.timeago").timeago();
-      $(SHOWOFF.div).fadeIn();
+      $('#' + SHOWOFF.div).fadeIn();
    },
    truncate: function(text, size) {
       return (text.length > size) ? text.substring(0, size-3) + "..." : text;
